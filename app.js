@@ -8,7 +8,7 @@
 /* ══════════════════════════════════════════
    Constants & element references
 ══════════════════════════════════════════ */
-const API_URL = 'http://127.0.0.1:8000/predict';
+const API_URL = 'https://YOUR-USERNAME-YOUR-SPACE-NAME.hf.space/predict';
 
 const dropzone       = document.getElementById('dropzone');
 const dropzoneInner  = document.getElementById('dropzoneInner');
