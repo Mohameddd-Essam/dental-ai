@@ -8,8 +8,7 @@
 /* ══════════════════════════════════════════
    Constants & element references
 ══════════════════════════════════════════ */
-const API_URL = 'https://YOUR-USERNAME-YOUR-SPACE-NAME.hf.space/predict';
-
+const API_URL = 'https://m7mdessam-dental-app.hf.space/predict';
 const dropzone       = document.getElementById('dropzone');
 const dropzoneInner  = document.getElementById('dropzoneInner');
 const fileInput      = document.getElementById('fileInput');
