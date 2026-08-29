@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Oral Diagnostics AI – Upload a dental image and get instant AI-powered disease detection." />
+  <title>Oral Diagnostics AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient background orbs -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="app-wrapper">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4C14 4 9 8.5 9 14c0 3 1.2 5.5 3 7.5L14 32c.5 2 2 3 4 3h4c2 0 3.5-1 4-3l2-10.5c1.8-2 3-4.5 3-7.5 0-5.5-5-10-11-10z" fill="url(#tooth-gradient)" opacity="0.9"/>
+            <path d="M16 14c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#7dd3fc" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="20" cy="14" r="2" fill="#38bdf8" opacity="0.8"/>
+            <defs>
+              <linearGradient id="tooth-gradient" x1="9" y1="4" x2="31" y2="35" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#0ea5e9"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Oral Diagnostics</span>
+          <span class="logo-badge">AI</span>
+        </div>
+      </div>
+      <div class="header-status">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">Ready</span>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+      <!-- Left panel: Upload -->
+      <section class="panel panel-upload" aria-label="Image Upload">
+        <div class="panel-header">
+          <h2 class="panel-title">Scan Input</h2>
+          <p class="panel-subtitle">Upload a dental photograph for analysis</p>
+        </div>
+
+        <!-- Dropzone -->
+        <div class="dropzone" id="dropzone" role="button" tabindex="0"
+             aria-label="Drop zone - drag and drop or click to upload image">
+          <div class="dropzone-inner" id="dropzoneInner">
+            <div class="dz-icon" id="dzIcon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8" y="12" width="48" height="36" rx="6" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/>
+                <path d="M32 28v12M26 34l6-6 6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="46" cy="20" r="3" fill="currentColor" opacity="0.5"/>
+              </svg>
+            </div>
+            <p class="dz-label" id="dzLabel">Drag &amp; drop dental image here</p>
+            <p class="dz-sublabel">or click to browse files</p>
+            <div class="dz-formats">JPG &middot; PNG &middot; WEBP &middot; BMP</div>
+          </div>
+          <!-- Preview image (hidden until selected) -->
+          <img class="preview-img hidden" id="previewImg" alt="Selected dental scan preview" />
+          <div class="preview-overlay hidden" id="previewOverlay">
+            <button class="preview-change-btn" id="changeBtn" type="button">Change Image</button>
+          </div>
+        </div>
+
+        <input type="file" id="fileInput" accept="image/*" class="hidden" aria-label="File input" />
+
+        <!-- Action buttons -->
+        <div class="action-row">
+          <button class="btn btn-secondary" id="clearBtn" type="button" disabled>
+            <svg viewBox="0 0 20 20" fill="none"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Clear
+          </button>
+          <button class="btn btn-primary" id="analyzeBtn" type="button" disabled>
+            <svg viewBox="0 0 20 20" fill="none"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 3v5l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span id="analyzeBtnText">Analyze</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Right panel: Results -->
+      <section class="panel panel-result" aria-label="Diagnosis Result">
+        <div class="panel-header">
+          <h2 class="panel-title">Diagnosis Result</h2>
+          <p class="panel-subtitle">AI-powered oral disease detection</p>
+        </div>
+
+        <!-- Confidence ring -->
+        <div class="confidence-ring-wrapper">
+          <svg class="confidence-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="ring-bg" cx="100" cy="100" r="82"/>
+            <circle class="ring-fill" id="ringFill" cx="100" cy="100" r="82"
+                    stroke-dasharray="515.2" stroke-dashoffset="515.2"/>
+          </svg>
+          <div class="ring-center">
+            <span class="confidence-value" id="confidenceValue">0.0<span class="confidence-percent">%</span></span>
+            <span class="confidence-label">Confidence</span>
+          </div>
+        </div>
+
+        <!-- Disease name -->
+        <div class="disease-card" id="diseaseCard">
+          <div class="disease-icon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C8.686 2 6 4.239 6 7c0 1.5.6 2.9 1.6 3.9L9 17c.3 1 1 1.5 2 1.5h2c1 0 1.7-.5 2-1.5l1.4-6.1C17.4 9.9 18 8.5 18 7c0-2.761-2.686-5-6-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="disease-info">
+            <span class="disease-label">Detected Condition</span>
+            <span class="disease-name" id="diseaseName">&#8212;</span>
+          </div>
+        </div>
+
+        <!-- Info cards -->
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="info-card-label">Model</span>
+            <span class="info-card-value">Fine-tuned CNN</span>
+          </div>
+          <div class="info-card">
+            <span class="info-card-label">Classes</span>
+            <span class="info-card-value">6 Conditions</span>
+          </div>
+          <div class="info-card">
+            <span class="info-card-label">Input Size</span>
+            <span class="info-card-value">224 x 224</span>
+          </div>
+          <div class="info-card">
+            <span class="info-card-label">Backend</span>
+            <span class="info-card-value">FastAPI</span>
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <p class="disclaimer">
+          For research use only. Not a substitute for professional dental evaluation.
+        </p>
+      </section>
+
+    </main>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
